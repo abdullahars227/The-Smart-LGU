@@ -1,0 +1,206 @@
+.bsse-page {
+  padding-bottom: 1.6rem;
+  background: linear-gradient(180deg, #f7fcf9 0%, #f1f9f4 42%, #ffffff 100%);
+}
+
+.bsse-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 3.2rem 0 2.3rem;
+  background: linear-gradient(125deg, #083b25 0%, #0f5132 44%, #1f8f55 100%);
+}
+
+.bsse-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 85% 18%, rgba(255, 255, 255, 0.28), transparent 45%);
+}
+
+.bsse-hero__inner {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+}
+
+.bsse-eyebrow {
+  margin: 0 0 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(220, 252, 231, 0.95);
+}
+
+.bsse-hero h1 {
+  margin: 0;
+  line-height: 1.15;
+  font-size: clamp(1.85rem, 4.6vw, 3rem);
+}
+
+.bsse-hero h1 span {
+  color: #dcfce7;
+}
+
+.bsse-hero__lede {
+  margin: 1rem 0 1.2rem;
+  max-width: 70ch;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.bsse-hero__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.bsse-hero__chips span {
+  border: 1px solid rgba(220, 252, 231, 0.45);
+  background: rgba(220, 252, 231, 0.16);
+  color: #f0fdf4;
+  border-radius: 999px;
+  padding: 0.33rem 0.78rem;
+  font-size: 0.79rem;
+  font-weight: 600;
+}
+
+.bsse-core-grid {
+  display: grid;
+  margin-top: 1.4rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.bsse-panel--full {
+  grid-column: 1 / -1;
+}
+
+.bsse-panel {
+  border: 1px solid #d8e9de;
+  border-radius: 18px;
+  background: #ffffff;
+  padding: 1.2rem 1.15rem;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.bsse-panel--accent {
+  border-color: #bbf7d0;
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+}
+
+.bsse-panel h2,
+.bsse-panel h3 {
+  margin: 0 0 0.55rem;
+  color: #0b3b24;
+}
+
+.bsse-panel h2 {
+  font-size: clamp(1.2rem, 2.8vw, 1.6rem);
+}
+
+.bsse-panel h3 {
+  font-size: 1.12rem;
+}
+
+.bsse-panel p {
+  margin: 0.45rem 0 0;
+  color: #334155;
+  line-height: 1.62;
+}
+
+.bsse-list {
+  margin: 0.4rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.bsse-list li {
+  position: relative;
+  padding-left: 1.15rem;
+  color: #334155;
+  line-height: 1.55;
+}
+
+.bsse-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.58rem;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: #16a34a;
+}
+
+.bsse-list--checks li::before {
+  width: 0.5rem;
+  height: 0.5rem;
+  top: 0.53rem;
+  background: #16a34a;
+}
+
+.bsse-panel--society {
+  border-color: #bbf7d0;
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+}
+
+.bsse-society-link {
+  display: inline-flex;
+  margin-top: 0.9rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.58rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid #0f5132;
+  color: #0f5132;
+  background: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.bsse-society-link:hover {
+  background: #0f5132;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1024px) {
+  .bsse-core-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bsse-panel--full {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .bsse-page {
+    padding-bottom: 1.2rem;
+  }
+
+  .bsse-hero {
+    padding: 2.55rem 0 1.95rem;
+  }
+
+  .bsse-hero__chips {
+    gap: 0.45rem;
+  }
+
+  .bsse-hero__chips span {
+    font-size: 0.74rem;
+  }
+
+  .bsse-panel {
+    border-radius: 14px;
+    padding: 1rem 0.9rem;
+  }
+}

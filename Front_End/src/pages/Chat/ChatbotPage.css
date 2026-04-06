@@ -1,0 +1,15 @@
+.chatbot-page {
+  padding: 2rem 0 3rem;
+}
+
+.chatbot-page h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.75rem;
+}
+
+.chatbot-page__hint {
+  margin: 0;
+  color: var(--color-muted, #5c5c5c);
+  max-width: 40rem;
+  line-height: 1.5;
+}

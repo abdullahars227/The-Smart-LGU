@@ -1,0 +1,35 @@
+.program-page {
+  padding-top: 4rem;
+  padding-bottom: 5rem;
+}
+
+.program-page-card {
+  max-width: 760px;
+  border: 1px solid #d8e2ee;
+  border-radius: 20px;
+  background: #ffffff;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+}
+
+.program-page-tag {
+  display: inline-block;
+  margin-bottom: 0.6rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  background: linear-gradient(130deg, #6b21a8, #a855f7);
+}
+
+.program-page h1 {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  margin-bottom: 0.8rem;
+}
+
+.program-page p {
+  max-width: 70ch;
+  color: #334155;
+}

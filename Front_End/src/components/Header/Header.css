@@ -1,0 +1,245 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  backdrop-filter: blur(12px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(248, 252, 250, 0.94) 100%);
+  border-bottom: 1px solid rgba(15, 81, 50, 0.12);
+  box-shadow: 0 4px 24px rgba(4, 30, 18, 0.06);
+}
+
+.header-row {
+  min-height: 78px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.brand {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.brand > div {
+  min-width: 0;
+}
+
+.brand-logo-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  background: transparent;
+  border: none;
+  box-shadow: 0 4px 16px rgba(15, 81, 50, 0.18);
+  flex-shrink: 0;
+}
+
+.brand-title {
+  font-weight: 700;
+  line-height: 1.2;
+  font-size: clamp(0.88rem, 3.2vw, 1rem);
+  overflow-wrap: break-word;
+}
+
+.brand-subtitle {
+  font-size: clamp(0.78rem, 2.8vw, 0.86rem);
+  color: #475569;
+}
+
+.nav-links {
+  display: flex;
+  gap: 0.45rem 0.65rem;
+  flex-wrap: wrap;
+  perspective: 800px;
+  min-width: 0;
+  justify-content: flex-end;
+  flex: 1 1 auto;
+}
+
+/* Same sweep + pill treatment as home buttons */
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: #0f5132;
+  background: #ffffff;
+  border: 2px solid rgba(15, 81, 50, 0.22);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+  transform: translate3d(0, 0, 0);
+  transform-style: preserve-3d;
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s ease,
+    border-color 0.35s ease;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #0f5132 0%, #1a7f3f 55%, #22804a 100%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 0;
+}
+
+.nav-link:not(.nav-link--active):hover {
+  transform: translate3d(0, -2px, 0) rotateX(3deg);
+  border-color: rgba(15, 81, 50, 0.25);
+  box-shadow: 0 8px 22px rgba(15, 81, 50, 0.15);
+}
+
+.nav-link:not(.nav-link--active):hover::before {
+  transform: scaleX(1);
+}
+
+/* Label stays dark until green fill advances (avoids white-on-white) */
+.nav-link__label {
+  position: relative;
+  z-index: 1;
+  transition: color 0.15s ease 0s;
+}
+
+.nav-link:not(.nav-link--active):hover .nav-link__label {
+  color: #ffffff;
+  transition: color 0.18s ease 0.38s;
+}
+
+/* Current route: solid green, no sweep */
+.nav-link--active {
+  color: #ffffff;
+  background: linear-gradient(145deg, #062a1a 0%, #0f5132 50%, #1a7f3f 100%);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 4px 14px rgba(15, 81, 50, 0.35),
+    0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.nav-link--active::before {
+  display: none;
+}
+
+.nav-link--active .nav-link__label {
+  color: #ffffff;
+}
+
+.nav-link--user {
+  cursor: default;
+  max-width: 11rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-style: dashed;
+  opacity: 0.92;
+}
+
+.nav-link--user::before {
+  display: none;
+}
+
+.nav-link--btn {
+  cursor: pointer;
+  font: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-link::before {
+    transition: none;
+  }
+
+  .nav-link:not(.nav-link--active):hover {
+    transform: none;
+  }
+
+  .nav-link:not(.nav-link--active):hover::before {
+    transform: scaleX(1);
+  }
+
+  .nav-link:not(.nav-link--active):hover .nav-link__label {
+    color: #ffffff;
+    transition: color 0.15s ease 0s;
+  }
+}
+
+@media (max-width: 900px) {
+  .header-row {
+    align-items: flex-start;
+    flex-direction: column;
+    padding-block: 0.85rem;
+  }
+
+  .brand {
+    width: 100%;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav-link {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Mobile: crisp nav + header — no backdrop blur (muddy on many phones) */
+@media (max-width: 768px) {
+  .site-header {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: #ffffff;
+    box-shadow: 0 1px 0 rgba(15, 81, 50, 0.14);
+  }
+
+  .brand-logo-img {
+    box-shadow: 0 1px 4px rgba(15, 81, 50, 0.2);
+  }
+
+  .nav-link {
+    box-shadow: none;
+    border-width: 1.5px;
+  }
+
+  .nav-link--active {
+    background: #0f5132;
+    border-color: #0f5132;
+    box-shadow: 0 2px 8px rgba(15, 81, 50, 0.3);
+  }
+
+  /* Kill default blue/purple link colors from the browser on route pills */
+  .nav-link,
+  .nav-link:link,
+  .nav-link:visited {
+    color: #0f5132;
+  }
+
+  .nav-link--active,
+  .nav-link--active:link,
+  .nav-link--active:visited {
+    color: #ffffff;
+  }
+
+  .nav-link:active {
+    opacity: 0.96;
+  }
+}

@@ -1,0 +1,212 @@
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  overflow: hidden;
+}
+
+.login-page__bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('/images/blur_login_img.jpg');
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.02);
+}
+
+.login-page__scrim {
+  position: absolute;
+  inset: 0;
+  /* background: linear-gradient(
+    135deg,
+    rgba(6, 42, 26, 0.88) 0%,
+    rgba(15, 81, 50, 0.78) 45%,
+    rgba(15, 81, 50, 0.55) 100%
+  ); */
+}
+
+.login-page__shell {
+  position: relative;
+  z-index: 1;
+  width: min(440px, 100%);
+}
+
+.login-page__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+  color: #f0fdf4;
+}
+
+.login-page__brand img {
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.login-page__brand-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.login-page__brand-sub {
+  margin: 0.15rem 0 0;
+  font-size: 0.78rem;
+  opacity: 0.9;
+}
+
+.login-card {
+  border-radius: 20px;
+  padding: clamp(1.35rem, 3vw, 1.75rem);
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 24px 48px rgba(6, 42, 26, 0.22),
+    0 0 0 1px rgba(15, 81, 50, 0.06);
+  backdrop-filter: blur(10px);
+}
+
+.login-card__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #0f5132;
+}
+
+.login-card__title {
+  margin: 0;
+  font-size: clamp(1.45rem, 3.5vw, 1.85rem);
+  color: #052e1a;
+  letter-spacing: -0.02em;
+}
+
+.login-card__hint {
+  margin: 0.5rem 0 1rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.login-card__tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+  margin-bottom: 1.1rem;
+  padding: 0.25rem;
+  border-radius: 12px;
+  background: #ecfdf5;
+  border: 1px solid #bbf7d0;
+}
+
+.login-card__tab {
+  border: none;
+  border-radius: 10px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #0f5132;
+  background: transparent;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.login-card__tab--active {
+  background: #ffffff;
+  color: #052e1a;
+  box-shadow: 0 2px 8px rgba(15, 81, 50, 0.12);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.login-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #0f5132;
+}
+
+.login-form__field input {
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.95rem;
+  color: #0f172a;
+  background: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-form__field input:focus {
+  outline: none;
+  border-color: #0f5132;
+  box-shadow: 0 0 0 3px rgba(15, 81, 50, 0.15);
+}
+
+.login-form__error {
+  margin: 0;
+  padding: 0.55rem 0.65rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  color: #991b1b;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.login-form__submit {
+  margin-top: 0.25rem;
+  border: none;
+  border-radius: 999px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #ffffff;
+  background: linear-gradient(125deg, #0f5132, #15803d);
+  box-shadow: 0 10px 24px rgba(15, 81, 50, 0.28);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.login-form__submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(15, 81, 50, 0.32);
+}
+
+.login-form__submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.login-card__footer {
+  margin: 1.15rem 0 0;
+  text-align: center;
+}
+
+.login-card__home-link {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #0f5132;
+  text-decoration: none;
+}
+
+.login-card__home-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .login-page__brand {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

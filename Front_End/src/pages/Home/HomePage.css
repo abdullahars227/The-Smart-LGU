@@ -494,7 +494,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-program-card:hover .home-program-card__rotate {
+  .home-program-card:hover .home-program-card__rotate,
+  .home-program-card--flipped .home-program-card__rotate {
     transform: none;
   }
 
@@ -618,33 +619,35 @@
 }
 
 /*
- * Mobile / narrow: no flip — front face only, solid fills.
+ * Mobile / narrow: no hover — tap toggles .home-program-card--flipped (see HomePage.jsx).
  */
 @media (max-width: 900px) {
+  .home-program-card {
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(15, 81, 50, 0.12);
+  }
+
   .home-program-card__flip {
-    perspective: none;
+    perspective: 1000px;
+    perspective-origin: center center;
   }
 
   .home-program-card:hover .home-program-card__rotate {
     transform: none;
   }
 
-  .home-program-card__face--back {
-    display: none;
+  .home-program-card--flipped .home-program-card__rotate {
+    transform: rotateY(180deg);
   }
 
   .home-program-card__face--front {
-    position: relative;
-    transform: none;
-    backface-visibility: visible;
-    -webkit-backface-visibility: visible;
-    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
-    text-align: center;
-    align-items: center;
+    position: absolute;
+    transform: rotateY(0deg) translateZ(1px);
   }
 
-  .home-program-card:hover .home-program-card__face--front {
-    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.12);
+  .home-program-card__face--back {
+    display: flex;
   }
 
   .home-program-card .home-card-link {
@@ -661,6 +664,38 @@
 
   .card-bsai {
     background: #6d28d9;
+  }
+
+  .home-program-card__tap-hint {
+    display: block;
+  }
+}
+
+.home-program-card__tap-hint {
+  display: none;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  margin: 0.4rem 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @media (max-width: 900px) {
+    .home-program-card--flipped .home-program-card__rotate {
+      transform: none;
+    }
+
+    .home-program-card__face--back {
+      display: none;
+    }
+
+    .home-program-card__face--front {
+      position: relative;
+      transform: none;
+      backface-visibility: visible;
+      -webkit-backface-visibility: visible;
+    }
   }
 }
 

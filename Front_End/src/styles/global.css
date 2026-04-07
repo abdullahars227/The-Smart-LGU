@@ -58,8 +58,8 @@ a {
   width: 100%;
   max-width: 1180px;
   margin-inline: auto;
-  padding-left: max(1rem, env(safe-area-inset-left));
-  padding-right: max(1rem, env(safe-area-inset-right));
+  /* Same gutter on both sides (avoids lopsided safe-area / mobile padding) */
+  padding-inline: max(1rem, env(safe-area-inset-left), env(safe-area-inset-right));
   box-sizing: border-box;
 }
 

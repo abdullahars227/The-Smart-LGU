@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import HomeNewsCarousel from './HomeNewsCarousel'
 import HomeSocialMarquee from './HomeSocialMarquee'
@@ -54,6 +55,14 @@ const newsItems = [
 ]
 
 export default function HomePage() {
+  const [flipped, setFlipped] = useState(() => ({}))
+
+  const toggleProgramCard = (code, e) => {
+    if (typeof window !== 'undefined' && window.innerWidth > 900) return
+    if (e?.target?.closest?.('a')) return
+    setFlipped((prev) => ({ ...prev, [code]: !prev[code] }))
+  }
+
   return (
     <main>
       <HomeWelcomeSpeech />
@@ -118,7 +127,11 @@ export default function HomePage() {
         </div>
         <div className="home-cards-grid">
           {programs.map((program) => (
-            <article key={program.code} className="home-program-card">
+            <article
+              key={program.code}
+              className={`home-program-card${flipped[program.code] ? ' home-program-card--flipped' : ''}`}
+              onClick={(e) => toggleProgramCard(program.code, e)}
+            >
               <div className="home-program-card__flip">
                 <div className="home-program-card__rotate">
                   <div
@@ -127,7 +140,11 @@ export default function HomePage() {
                     <span className="home-program-card__code">{program.code}</span>
                     <h3>{program.title}</h3>
                     <p>{program.description}</p>
-                    <NavLink to={`/${program.code.toLowerCase()}`} className="home-card-link">
+                    <NavLink
+                      to={`/${program.code.toLowerCase()}`}
+                      className="home-card-link"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <span className="home-btn__label">Open Route</span>
                     </NavLink>
                   </div>
@@ -144,12 +161,16 @@ export default function HomePage() {
                       to={`/${program.code.toLowerCase()}`}
                       className="home-card-link"
                       tabIndex={-1}
+                      onClick={(e) => e.stopPropagation()}
                     >
                       <span className="home-btn__label">Open Route</span>
                     </NavLink>
                   </div>
                 </div>
               </div>
+              <p className="home-program-card__tap-hint" aria-hidden="true">
+                Tap card to flip
+              </p>
             </article>
           ))}
         </div>

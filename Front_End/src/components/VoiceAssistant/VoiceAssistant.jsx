@@ -1,16 +1,27 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition'
 import './VoiceAssistant.css'
 
+/** Mic often picks up our own route-confirmation TTS — ignore transcripts that match that wording. */
+function isLikelySpeakerEcho(text) {
+  const v = text.trim().toLowerCase()
+  if (!v) return false
+  if (/^opening\b/.test(v)) return true
+  if (v.includes('opening the') && v.includes('program')) return true
+  if (v.includes('navigated using')) return true
+  return false
+}
+
 function resolveRouteFromSpeech(text) {
+  if (isLikelySpeakerEcho(text)) return null
+
   const value = text.toLowerCase()
 
   const bscsKeywords = [
     'bscs',
-     'cs',
     'bs cs',
     'computer science',
     'cs program',
@@ -20,7 +31,6 @@ function resolveRouteFromSpeech(text) {
   ]
   const bsseKeywords = [
     'bsse',
-    'se',
     'bs se',
     'software engineering',
     'se program',
@@ -31,7 +41,6 @@ function resolveRouteFromSpeech(text) {
   const bsaiKeywords = [
     'bsai',
     'bs ai',
-    'ai',
     'artificial intelligence',
     'ai program',
     'ai page',
@@ -42,40 +51,20 @@ function resolveRouteFromSpeech(text) {
   if (bscsKeywords.some((key) => value.includes(key))) return '/bscs'
   if (bsseKeywords.some((key) => value.includes(key))) return '/bsse'
   if (bsaiKeywords.some((key) => value.includes(key))) return '/bsai'
-  if (value.includes('home')) return '/'
+  if (/\bhome\b/.test(value)) return '/'
   return null
 }
 
-/** Must stay in sync with routes returned by resolveRouteFromSpeech. */
-const ROUTE_CONFIRMATION_PHRASES = {
-  '/': 'Opening home.',
-  '/bscs': 'Opening the BSCS program.',
-  '/bsse': 'Opening the BSSE program.',
-  '/bsai': 'Opening the BSAI program.',
-}
-
-/**
- * Speaks a short confirmation only for known voice routes.
- * Call only after navigate(route) has been invoked for the same `route`.
- */
-function speakRouteConfirmation(route) {
-  if (typeof window === 'undefined') return
-  const phrase = ROUTE_CONFIRMATION_PHRASES[route]
-  if (!phrase) return
-
-  const synth = window.speechSynthesis
-  if (!synth || typeof SpeechSynthesisUtterance === 'undefined') return
-
-  synth.cancel()
-  const utterance = new SpeechSynthesisUtterance(phrase)
-  utterance.rate = 1.02
-  synth.speak(utterance)
-}
+const RESUME_LISTEN_MS = 600
 
 export default function VoiceAssistant() {
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
   const [statusMessage, setStatusMessage] = useState('Say: BSCS, SE, AI, or Home')
+  const resumeTimerRef = useRef(null)
+  const isOpenRef = useRef(isOpen)
+  isOpenRef.current = isOpen
+
   const {
     transcript,
     finalTranscript,
@@ -86,18 +75,36 @@ export default function VoiceAssistant() {
 
   const supported = useMemo(() => browserSupportsSpeechRecognition, [browserSupportsSpeechRecognition])
 
-  useEffect(() => {
-    return () => {
-      if (typeof window !== 'undefined' && window.speechSynthesis) {
-        window.speechSynthesis.cancel()
+  const stopVoiceUi = useCallback(() => {
+    if (resumeTimerRef.current != null) {
+      window.clearTimeout(resumeTimerRef.current)
+      resumeTimerRef.current = null
+    }
+    try {
+      SpeechRecognition.abortListening()
+    } catch {
+      try {
+        SpeechRecognition.stopListening()
+      } catch {
+        /* ignore */
       }
     }
-  }, [])
+    resetTranscript()
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.cancel()
+    }
+  }, [resetTranscript])
+
+  useEffect(() => {
+    return () => {
+      stopVoiceUi()
+    }
+  }, [stopVoiceUi])
 
   useEffect(() => {
     if (!isOpen || !supported) return
 
-    const timer = setTimeout(async () => {
+    const timer = window.setTimeout(async () => {
       try {
         await SpeechRecognition.startListening({
           continuous: true,
@@ -110,24 +117,43 @@ export default function VoiceAssistant() {
     }, 250)
 
     return () => {
-      clearTimeout(timer)
-      SpeechRecognition.stopListening()
+      window.clearTimeout(timer)
+      SpeechRecognition.abortListening()
     }
   }, [isOpen, supported])
 
   useEffect(() => {
-    if (!finalTranscript) return
-    const route = resolveRouteFromSpeech(finalTranscript)
-    if (!route) {
-      setStatusMessage(`No route mapped for: "${finalTranscript}"`)
+    if (!finalTranscript || !isOpen) return
+
+    if (isLikelySpeakerEcho(finalTranscript)) {
+      resetTranscript()
       return
     }
 
-    navigate(route)
-    speakRouteConfirmation(route)
-    setStatusMessage(`Navigated using: "${finalTranscript}"`)
+    const route = resolveRouteFromSpeech(finalTranscript)
+    if (!route) {
+      setStatusMessage(`No route mapped for: "${finalTranscript}"`)
+      resetTranscript()
+      return
+    }
+
+    SpeechRecognition.abortListening()
     resetTranscript()
-  }, [finalTranscript, navigate, resetTranscript])
+
+    navigate(route)
+    setStatusMessage(`Opened ${route === '/' ? 'Home' : route.replace('/', '').toUpperCase()}. Say another command.`)
+
+    if (resumeTimerRef.current != null) window.clearTimeout(resumeTimerRef.current)
+    resumeTimerRef.current = window.setTimeout(async () => {
+      resumeTimerRef.current = null
+      if (!isOpenRef.current) return
+      try {
+        await SpeechRecognition.startListening({ continuous: true, language: 'en-US' })
+      } catch {
+        /* ignore */
+      }
+    }, RESUME_LISTEN_MS)
+  }, [finalTranscript, isOpen, navigate, resetTranscript])
 
   if (!browserSupportsSpeechRecognition) {
     return (
@@ -142,7 +168,7 @@ export default function VoiceAssistant() {
       {isOpen ? (
         <div className="voice-assistant">
           <p className="voice-assistant__title">Voice Navigation</p>
-          <p className="voice-assistant__hint">Say: BSCS, CS, BSSE, SE, BSAI, AI, Home</p>
+          <p className="voice-assistant__hint">Say: BSCS, BSSE, BSAI, or Home (speakers can confuse the mic—use headphones if it repeats)</p>
           <p className="voice-assistant__status">
             Mic: <strong>{listening ? 'On' : 'Off'}</strong>
           </p>
@@ -158,7 +184,10 @@ export default function VoiceAssistant() {
         onClick={() => {
           setIsOpen((prev) => {
             const next = !prev
-            if (!next) setStatusMessage('Voice assistant closed')
+            if (!next) {
+              stopVoiceUi()
+              setStatusMessage('Voice assistant closed')
+            }
             return next
           })
         }}

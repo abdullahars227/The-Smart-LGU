@@ -13,8 +13,7 @@
     "react-dom": "^18.3.1",
     "react-fast-marquee": "^1.6.5",
     "react-router-dom": "^6.28.0",
-    "react-speech-recognition": "^4.0.1",
-    "react-text-to-speech": "^5.1.9"
+    "react-speech-recognition": "^4.0.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.3",

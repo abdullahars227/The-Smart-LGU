@@ -1,10 +1,9 @@
 import { useEffect, useRef } from 'react'
-import { useSpeech } from 'react-text-to-speech'
 import { PAGE_LOAD_ID } from '../../initialDocumentPath.js'
 
-const WELCOME_TEXT =
-  'Welcome to Lahore Garrison University.'
+const WELCOME_TEXT = 'Welcome to Lahore Garrison University.'
 
+/** Only set after TTS finishes — avoids React Strict Mode skipping playback when onStart wrote storage before unmount. */
 const STORAGE_KEY = `lgu_welcome_done_${PAGE_LOAD_ID}`
 
 function getNavigationType() {
@@ -17,14 +16,6 @@ function getNavigationType() {
   return 'navigate'
 }
 
-/**
- * When to play welcome TTS:
- * - Reload on `/` → yes
- * - Browser back/forward → no (avoid repeating when returning to home)
- * - Normal navigation → yes only if the **current** URL is `/` (not only the first URL of the session).
- *   Using the first path only broke local dev when the app opened on `/login` or another route first,
- *   then navigated to `/` — production often hits `/` first so it looked fine there.
- */
 function shouldPlayWelcome() {
   const t = getNavigationType()
   if (t === 'reload') return true
@@ -36,29 +27,10 @@ function shouldPlayWelcome() {
 }
 
 export default function HomeWelcomeSpeech() {
-  const { start, stop } = useSpeech({
-    text: WELCOME_TEXT,
-    stableText: true,
-    rate: 0.96,
-    pitch: 1,
-    volume: 1,
-    lang: 'en-US',
-    highlightText: false,
-    onStart: () => {
-      try {
-        sessionStorage.setItem(STORAGE_KEY, '1')
-      } catch {
-        /* ignore */
-      }
-    },
-  })
-
-  const startRef = useRef(start)
-  const stopRef = useRef(stop)
-  startRef.current = start
-  stopRef.current = stop
+  const cancelledRef = useRef(false)
 
   useEffect(() => {
+    cancelledRef.current = false
     try {
       if (sessionStorage.getItem(STORAGE_KEY)) return undefined
     } catch {
@@ -67,70 +39,91 @@ export default function HomeWelcomeSpeech() {
     if (!shouldPlayWelcome()) return undefined
 
     const synth = window.speechSynthesis
-    if (!synth) return undefined
+    if (!synth || typeof SpeechSynthesisUtterance === 'undefined') return undefined
 
-    let cancelled = false
+    const playWelcome = () => {
+      if (cancelledRef.current) return
+      synth.cancel()
+      const u = new SpeechSynthesisUtterance(WELCOME_TEXT)
+      u.rate = 0.96
+      u.pitch = 1
+      u.volume = 1
+      u.lang = 'en-US'
+      u.onend = () => {
+        try {
+          sessionStorage.setItem(STORAGE_KEY, '1')
+        } catch {
+          /* ignore */
+        }
+      }
+      u.onerror = () => {
+        try {
+          sessionStorage.setItem(STORAGE_KEY, '1')
+        } catch {
+          /* ignore */
+        }
+      }
+      synth.speak(u)
+    }
+
     let playTimer = null
     let voicesTimer = null
     let interactionTimer = null
-    let scheduled = false
 
-    const play = () => {
-      if (cancelled || scheduled) return
-      scheduled = true
+    const schedulePlay = () => {
       playTimer = window.setTimeout(() => {
-        if (!cancelled) startRef.current()
+        if (!cancelledRef.current) playWelcome()
       }, 80)
     }
 
     if (synth.getVoices().length > 0) {
-      play()
+      schedulePlay()
     } else {
       const onVoices = () => {
-        if (cancelled || !synth.getVoices().length) return
+        if (cancelledRef.current || !synth.getVoices().length) return
         synth.removeEventListener('voiceschanged', onVoices)
         if (voicesTimer != null) {
           window.clearTimeout(voicesTimer)
           voicesTimer = null
         }
-        play()
+        schedulePlay()
       }
       synth.addEventListener('voiceschanged', onVoices)
       voicesTimer = window.setTimeout(() => {
         synth.removeEventListener('voiceschanged', onVoices)
         voicesTimer = null
-        if (!cancelled) play()
+        if (!cancelledRef.current) schedulePlay()
       }, 400)
     }
 
     const onFirstPointer = () => {
-      if (cancelled) return
+      if (cancelledRef.current) return
       try {
         if (sessionStorage.getItem(STORAGE_KEY)) return
       } catch {
         /* ignore */
       }
-      startRef.current()
+      playWelcome()
     }
 
     interactionTimer = window.setTimeout(() => {
-      if (cancelled) return
+      if (cancelledRef.current) return
       try {
         if (sessionStorage.getItem(STORAGE_KEY)) return
       } catch {
         /* ignore */
       }
-      if (window.speechSynthesis?.speaking) return
+      if (synth.speaking) return
       window.addEventListener('pointerdown', onFirstPointer, { once: true, passive: true })
     }, 900)
 
     return () => {
-      cancelled = true
+      cancelledRef.current = true
       if (playTimer != null) window.clearTimeout(playTimer)
       if (voicesTimer != null) window.clearTimeout(voicesTimer)
       if (interactionTimer != null) window.clearTimeout(interactionTimer)
       window.removeEventListener('pointerdown', onFirstPointer)
-      stopRef.current()
+      synth.cancel()
     }
   }, [])
 

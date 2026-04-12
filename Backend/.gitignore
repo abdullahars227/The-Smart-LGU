@@ -1,4 +1,7 @@
 node_modules/
 .env
+
+# Optional: keep demo PDFs out of git
+knowledge/*.pdf
 *.log
 .DS_Store

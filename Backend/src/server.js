@@ -1,8 +1,8 @@
-import 'dotenv/config'
+import './config/loadEnv.js'
 import { createApp } from './app.js'
 import { connectDb } from './config/db.js'
 
-const port = Number(process.env.PORT) || 5000
+const port = Number(process.env.PORT) || 3000
 
 async function main() {
   await connectDb()

@@ -3,6 +3,7 @@ import cors from 'cors'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import authRoutes from './routes/authRoutes.js'
+import ragRoutes from './routes/ragRoutes.js'
 
 export function createApp() {
   const app = express()
@@ -16,8 +17,8 @@ export function createApp() {
   })
 
   app.use('/api/auth', authRoutes)
+  app.use('/api/rag', ragRoutes)
 
- 
   const __filename = fileURLToPath(import.meta.url)
   const __dirname = path.dirname(__filename)
 

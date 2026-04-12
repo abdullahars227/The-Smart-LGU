@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useSpeech } from 'react-text-to-speech'
-import { INITIAL_DOCUMENT_PATH, PAGE_LOAD_ID } from '../../initialDocumentPath.js'
+import { PAGE_LOAD_ID } from '../../initialDocumentPath.js'
 
 const WELCOME_TEXT =
   'Welcome to Lahore Garrison University.'
@@ -17,12 +17,21 @@ function getNavigationType() {
   return 'navigate'
 }
 
-/** Full page load to `/`, or reload on home — not client nav from another route. */
+/**
+ * When to play welcome TTS:
+ * - Reload on `/` → yes
+ * - Browser back/forward → no (avoid repeating when returning to home)
+ * - Normal navigation → yes only if the **current** URL is `/` (not only the first URL of the session).
+ *   Using the first path only broke local dev when the app opened on `/login` or another route first,
+ *   then navigated to `/` — production often hits `/` first so it looked fine there.
+ */
 function shouldPlayWelcome() {
   const t = getNavigationType()
   if (t === 'reload') return true
   if (t === 'back_forward') return false
-  if (t === 'navigate' || t === 'prerender') return INITIAL_DOCUMENT_PATH === '/'
+  if (t === 'navigate' || t === 'prerender') {
+    return typeof window !== 'undefined' && window.location.pathname === '/'
+  }
   return false
 }
 

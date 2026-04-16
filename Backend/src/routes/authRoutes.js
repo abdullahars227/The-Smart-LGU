@@ -5,7 +5,12 @@ import { login, register } from '../controllers/authController.js'
 const router = Router()
 
 const registerRules = [
-  body('name').trim().isLength({ min: 2, max: 120 }).withMessage('Name is required'),
+  body('name')
+    .trim()
+    .isLength({ min: 2, max: 120 })
+    .withMessage('Name must be 2–120 characters')
+    .matches(/^[A-Za-z]+(?:[ '-][A-Za-z]+)*$/)
+    .withMessage('Name can contain letters, spaces, apostrophes, and hyphens only'),
   body('email').isEmail().normalizeEmail().withMessage('Valid email is required'),
   body('phone')
     .trim()

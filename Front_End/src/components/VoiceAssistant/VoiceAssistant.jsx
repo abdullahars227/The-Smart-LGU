@@ -5,14 +5,44 @@ import SpeechRecognition, {
 } from 'react-speech-recognition'
 import './VoiceAssistant.css'
 
-/** Mic often picks up our own route-confirmation TTS — ignore transcripts that match that wording. */
+/**
+ * Mic often picks up our own route-confirmation TTS — ignore transcripts that match that wording.
+ * Keep in sync with `routeOpeningPhrase()` below (anything we speak must be ignored here).
+ */
 function isLikelySpeakerEcho(text) {
   const v = text.trim().toLowerCase()
   if (!v) return false
   if (/^opening\b/.test(v)) return true
   if (v.includes('opening the') && v.includes('program')) return true
+  if (v.includes('opening the') && v.includes('home')) return true
   if (v.includes('navigated using')) return true
+  /* Enter-site welcome TTS (“Welcome to The Smart LGU.”) — ignore if mic picks it up */
+  if (v.includes('welcome to') && (v.includes('smart lgu') || v.includes('smart lg'))) return true
+  if (v.includes('welcome to') && v.includes('lahore')) return true
+  if (v.includes('welcome to') && v.includes('garrison')) return true
   return false
+}
+
+/** Spoken after navigation; must be caught by isLikelySpeakerEcho to avoid route loops. */
+function routeOpeningPhrase(route) {
+  if (route === '/') return 'Opening the home page.'
+  const code = route.replace('/', '').toUpperCase()
+  return `Opening the ${code} program.`
+}
+
+function speakRouteOpening(route, onComplete) {
+  if (typeof window === 'undefined' || !window.speechSynthesis) {
+    onComplete?.()
+    return
+  }
+  window.speechSynthesis.cancel()
+  const u = new SpeechSynthesisUtterance(routeOpeningPhrase(route))
+  u.rate = 0.95
+  u.onend = () => {
+    window.setTimeout(() => onComplete?.(), 400)
+  }
+  u.onerror = () => onComplete?.()
+  window.speechSynthesis.speak(u)
 }
 
 function resolveRouteFromSpeech(text) {
@@ -54,8 +84,6 @@ function resolveRouteFromSpeech(text) {
   if (/\bhome\b/.test(value)) return '/'
   return null
 }
-
-const RESUME_LISTEN_MS = 600
 
 export default function VoiceAssistant() {
   const navigate = useNavigate()
@@ -141,18 +169,20 @@ export default function VoiceAssistant() {
     resetTranscript()
 
     navigate(route)
-    setStatusMessage(`Opened ${route === '/' ? 'Home' : route.replace('/', '').toUpperCase()}. Say another command.`)
+    const label = route === '/' ? 'Home' : route.replace('/', '').toUpperCase()
+    setStatusMessage(`Navigated to ${label}. Confirmation is spoken; mic turns on again after.`)
 
     if (resumeTimerRef.current != null) window.clearTimeout(resumeTimerRef.current)
-    resumeTimerRef.current = window.setTimeout(async () => {
-      resumeTimerRef.current = null
+    resumeTimerRef.current = null
+
+    speakRouteOpening(route, async () => {
       if (!isOpenRef.current) return
       try {
         await SpeechRecognition.startListening({ continuous: true, language: 'en-US' })
       } catch {
         /* ignore */
       }
-    }, RESUME_LISTEN_MS)
+    })
   }, [finalTranscript, isOpen, navigate, resetTranscript])
 
   if (!browserSupportsSpeechRecognition) {

@@ -19,7 +19,6 @@ export default function Header() {
           />
           <div>
             <p className="brand-title">Lahore Garrison University</p>
-            <p className="brand-subtitle">Faculty of Computer Sciences</p>
           </div>
         </div>
         <div className="header-nav-wrap">

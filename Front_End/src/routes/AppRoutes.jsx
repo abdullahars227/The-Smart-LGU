@@ -5,6 +5,7 @@ import HomePage from '../pages/Home/HomePage'
 import BSCSPage from '../pages/BSCS/BSCSPage'
 import BSSEPage from '../pages/BSSE/BSSEPage'
 import BSAIPage from '../pages/BSAI/BSAIPage'
+import EligibilityPage from '../pages/Eligibility/EligibilityPage'
 import LoginPage from '../pages/Auth/LoginPage'
 import ChatbotPage from '../pages/Chat/ChatbotPage'
 
@@ -17,6 +18,7 @@ export default function AppRoutes() {
         <Route path="/bscs" element={<BSCSPage />} />
         <Route path="/bsse" element={<BSSEPage />} />
         <Route path="/bsai" element={<BSAIPage />} />
+        <Route path="/eligibility" element={<EligibilityPage />} />
         <Route
           path="/assistant"
           element={

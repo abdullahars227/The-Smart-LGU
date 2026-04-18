@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import HomeNewsCarousel from './HomeNewsCarousel'
 import HomeSocialMarquee from './HomeSocialMarquee'
-import HomeWelcomeSpeech from './HomeWelcomeSpeech'
 import StatsCounter from '../../components/StatsCounter/StatsCounter'
+import HomeEnterSiteModal from '../../components/HomeEnterSiteModal/HomeEnterSiteModal'
 import './HomePage.css'
 
 /** Campus hero photo — swap between hero-campus.jpg (lawn + building) and hero-campus-alt.jpg (alternate). */
@@ -38,7 +38,7 @@ const newsItems = [
     tag: 'Innovation',
     title: 'Innovation and Entrepreneurship Session',
     text:
-      'Faculty of Computer Sciences hosted an industry-led session on global service startup opportunities.',
+      'LGU hosted an industry-led session on global service startup opportunities.',
   },
   {
     tag: 'Academics',
@@ -65,7 +65,7 @@ export default function HomePage() {
 
   return (
     <main>
-      <HomeWelcomeSpeech />
+      <HomeEnterSiteModal />
       <section className="home-hero" aria-labelledby="home-hero-heading">
         <div
           className="home-hero__bg"
@@ -75,7 +75,7 @@ export default function HomePage() {
         <div className="home-hero__scrim" role="presentation" />
         <div className="container home-hero__inner">
           <div className="home-hero__main">
-            <p className="home-kicker home-kicker--on-hero">Faculty of Computer Sciences</p>
+            <p className="home-kicker home-kicker--on-hero">Lahore Garrison University</p>
             <h1 id="home-hero-heading">Shape the Future with Computing, Engineering &amp; AI</h1>
             <p className="home-hero-text">
               Lahore Garrison University — excellence in academia, research, and graduates ready for
@@ -119,6 +119,22 @@ export default function HomePage() {
       <HomeSocialMarquee />
 
       <StatsCounter />
+
+      <section className="home-elig-cta container" aria-labelledby="home-elig-cta-heading">
+        <div className="home-elig-cta__inner">
+          <div className="home-elig-cta__copy">
+            <p className="home-kicker">Plan your admission</p>
+            <h2 id="home-elig-cta-heading">Admission eligibility estimator</h2>
+            <p className="home-elig-cta__text">
+              Check the 50% Intermediate minimum, compare BSCS, BSSE, BSAI, and BSIT admission bands, and see a
+              scholarship snapshot—on a dedicated planner page.
+            </p>
+          </div>
+          <NavLink to="/eligibility" className="home-elig-cta__btn">
+            Open admission planner
+          </NavLink>
+        </div>
+      </section>
 
       <section className="home-programs container">
         <div className="home-section-head">

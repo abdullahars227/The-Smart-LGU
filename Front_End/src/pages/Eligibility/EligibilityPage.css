@@ -1,0 +1,5 @@
+/* Full-page route: spacing below fixed header */
+.eligibility-page {
+  padding-top: 0.25rem;
+  min-height: min(100vh, 100%);
+}

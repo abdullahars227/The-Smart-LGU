@@ -70,7 +70,7 @@ export default function Footer() {
 
       <div className="site-footer__bottom">
         <p className="container site-footer__note">
-          © {new Date().getFullYear()} Lahore Garrison University · Faculty of Computer Sciences
+          © {new Date().getFullYear()} Lahore Garrison University
         </p>
       </div>
     </footer>

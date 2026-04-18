@@ -197,6 +197,32 @@
   }
 }
 
+.bscs-hero__energy-line {
+  stroke-dasharray: 8 6;
+  animation: bscs-hero-energy-dash 2.8s linear infinite;
+  filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.35));
+}
+
+@keyframes bscs-hero-energy-dash {
+  to {
+    stroke-dashoffset: -56;
+  }
+}
+
+.bscs-hero__hub {
+  animation: bscs-hero-hub-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes bscs-hero-hub-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgba(34, 197, 94, 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.45));
+  }
+}
+
 .bscs-strip {
   position: relative;
   z-index: 2;
@@ -395,6 +421,15 @@
   box-shadow: 0 20px 48px rgba(15, 81, 50, 0.1);
 }
 
+.bscs-media__visual--pipeline {
+  padding: 1.25rem 1.1rem 1.5rem;
+  background: linear-gradient(165deg, #ffffff 0%, var(--bscs-green-mint) 45%, #ecfdf5 100%);
+  min-height: min(280px, 42vw);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .bscs-media__img {
   display: block;
   width: 100%;
@@ -433,6 +468,52 @@
   margin: 0 0 1.25rem;
   color: var(--bscs-muted);
   line-height: 1.65;
+}
+
+/* Animated SDLC pipeline (replaces static photo) */
+.bscs-pipeline {
+  width: 100%;
+}
+
+.bscs-pipeline__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.bscs-pipeline__route {
+  stroke-dasharray: 14 10;
+  animation: bscs-pipeline-dash 22s linear infinite;
+}
+
+.bscs-pipeline__route--flow {
+  stroke-dasharray: 6 18;
+  animation: bscs-pipeline-flow 7s linear infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes bscs-pipeline-dash {
+  to {
+    stroke-dashoffset: -640;
+  }
+}
+
+@keyframes bscs-pipeline-flow {
+  to {
+    stroke-dashoffset: -480;
+  }
+}
+
+.bscs-pipeline__node {
+  filter: drop-shadow(0 2px 6px rgba(15, 81, 50, 0.12));
+}
+
+.bscs-pipeline__node-label {
+  font-family: system-ui, 'Segoe UI', sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  fill: var(--bscs-green);
 }
 
 .bscs-outcomes {
@@ -609,12 +690,31 @@
   .bscs-hero__aurora,
   .bscs-eyebrow__dot,
   .bscs-hero__tech-pitch,
-  .bscs-media__holo {
+  .bscs-media__holo,
+  .bscs-hero__energy-line,
+  .bscs-pipeline__route {
     animation: none !important;
   }
 
   .bscs-hero__tech-pitch {
     transform: translate3d(0, 0, 0) rotateX(-12deg) rotateY(0deg);
+  }
+
+  .bscs-hero__hub {
+    animation: none !important;
+  }
+
+  .bscs-hero__energy-line {
+    stroke-dasharray: none;
+  }
+
+  .bscs-pipeline__route {
+    stroke-dasharray: none;
+  }
+
+  .bscs-hero__packet,
+  .bscs-pipeline__packet {
+    opacity: 0;
   }
 }
 

@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom'
+import ScrollToTop from '../components/ScrollToTop'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import VoiceAssistant from '../components/VoiceAssistant/VoiceAssistant'
@@ -7,6 +8,7 @@ import MobileWhatsApp from '../components/MobileWhatsApp/MobileWhatsApp'
 export default function MainLayout() {
   return (
     <div className="app-shell">
+      <ScrollToTop />
       <Header />
       <MobileWhatsApp />
       <VoiceAssistant />

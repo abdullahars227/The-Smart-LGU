@@ -65,7 +65,6 @@ export default function LoginPage() {
           <img src="/images/lgu-logo.jpg" width={56} height={56} alt="" />
           <div>
             <p className="login-page__brand-title">Lahore Garrison University</p>
-            <p className="login-page__brand-sub">Faculty of Computer Sciences</p>
           </div>
         </div>
 

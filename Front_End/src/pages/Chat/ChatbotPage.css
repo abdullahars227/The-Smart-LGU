@@ -8,7 +8,7 @@
   height: calc(100dvh - var(--site-header-h));
   min-height: calc(100dvh - var(--site-header-h));
   max-height: calc(100dvh - var(--site-header-h));
-  padding: 0.65rem 0 0.75rem;
+  padding: 0.35rem 0 0.45rem;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -38,21 +38,45 @@
 
 .chatbot-page__header {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 0.65rem 1rem;
-  margin-bottom: 0.65rem;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.4rem;
   flex-shrink: 0;
 }
 
 .chatbot-page__head-text {
   max-width: 42rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.chatbot-page__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.65rem;
+  margin-bottom: 0.2rem;
+}
+
+.chatbot-page__quota-badge {
+  flex-shrink: 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #14532d;
+  background: #ecfdf5;
+  border: 1px solid rgba(15, 81, 50, 0.2);
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  white-space: nowrap;
 }
 
 .chatbot-page__title {
-  margin: 0 0 0.4rem;
-  font-size: clamp(1.45rem, 2.8vw, 2rem);
+  margin: 0;
+  font-size: clamp(1.15rem, 2.4vw, 1.65rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.15;
@@ -72,18 +96,18 @@
 
 .chatbot-page__subtitle {
   margin: 0;
-  font-size: clamp(0.8125rem, 1.5vw, 0.9rem);
-  color: #5c6b7a;
+  font-size: clamp(0.72rem, 1.35vw, 0.82rem);
+  color: #64748b;
   max-width: 44rem;
-  line-height: 1.42;
+  line-height: 1.35;
 }
 
 .chatbot-page__clear {
   border: 1px solid rgba(15, 81, 50, 0.22);
   background: linear-gradient(180deg, #fff 0%, #f6faf8 100%);
   color: #1e3a2f;
-  padding: 0.5rem 1rem;
-  min-height: 44px;
+  padding: 0.35rem 0.65rem;
+  min-height: 36px;
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
@@ -125,12 +149,14 @@
 .chatbot-page__messages {
   flex: 1 1 auto;
   min-height: 0;
+  /* Reserve vertical space for transcript so Q&A stays visible (mobile + desktop) */
+  min-height: min(52dvh, 28rem);
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 1rem 1.15rem 0.85rem;
+  padding: 0.55rem 0.75rem 0.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0.55rem;
   background-color: #f0f4f2;
   background-image: radial-gradient(circle at 1px 1px, rgba(15, 81, 50, 0.055) 1px, transparent 0);
   background-size: 20px 20px;
@@ -153,6 +179,17 @@
   line-height: 1.52;
   font-size: 0.9375rem;
   animation: chatbot-bubble-in 0.32s ease both;
+}
+
+.chatbot-page__bubble--welcome {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.chatbot-page__bubble--welcome .chatbot-page__bubble-label {
+  margin-bottom: 0.25rem;
+  font-size: 0.62rem;
 }
 
 @keyframes chatbot-bubble-in {
@@ -285,38 +322,49 @@
   font-size: 0.875rem;
 }
 
-/* Campus shortcuts — compact strip; transcript above gets flex space */
+/* Campus shortcuts — one row, horizontal scroll; minimal height */
 .chatbot-page__quick-campus {
-  padding: 0.5rem 1rem 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.55rem 0.35rem;
   border-top: 1px solid rgba(226, 232, 225, 0.9);
-  background: linear-gradient(180deg, #ecfdf5 0%, #f7faf8 55%, #f4f4f5 100%);
+  background: #f0fdf4;
   flex-shrink: 0;
 }
 
 .chatbot-page__quick-campus-label {
-  display: block;
-  font-size: 0.65rem;
+  flex-shrink: 0;
+  font-size: 0.58rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.06em;
   color: #166534;
-  margin-bottom: 0.35rem;
+  margin: 0;
 }
 
 .chatbot-page__quick-campus-chips {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
+  flex-wrap: nowrap;
+  gap: 0.3rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  padding: 2px 0;
+  min-width: 0;
+  flex: 1;
 }
 
 .chatbot-page__chip {
+  flex-shrink: 0;
   border: 1px solid rgba(34, 197, 94, 0.35);
   background: #fff;
   color: #14532d;
-  padding: 0.35rem 0.7rem;
-  min-height: 40px;
+  padding: 0.22rem 0.5rem;
+  min-height: 30px;
   border-radius: 999px;
-  font-size: 0.8125rem;
+  font-size: 0.72rem;
   font-weight: 600;
   cursor: pointer;
   transition:
@@ -401,10 +449,10 @@
 
 .chatbot-page__form {
   display: flex;
-  gap: 0.65rem;
+  gap: 0.5rem;
   align-items: flex-end;
-  padding: 0.75rem 1rem 0.85rem;
-  padding-bottom: max(0.85rem, env(safe-area-inset-bottom, 0px));
+  padding: 0.45rem 0.65rem 0.55rem;
+  padding-bottom: max(0.55rem, env(safe-area-inset-bottom, 0px));
   border-top: 1px solid rgba(226, 232, 225, 0.95);
   background: linear-gradient(180deg, #f8faf9 0%, #f0f4f2 100%);
   box-shadow: 0 -10px 28px -14px rgba(15, 23, 42, 0.08);
@@ -414,9 +462,9 @@
 .chatbot-page__input {
   flex: 1;
   resize: vertical;
-  min-height: 2.85rem;
-  max-height: 8rem;
-  padding: 0.7rem 1rem;
+  min-height: 2.4rem;
+  max-height: 6rem;
+  padding: 0.5rem 0.75rem;
   border: 1px solid rgba(203, 213, 225, 0.95);
   border-radius: 0.85rem;
   font: inherit;
@@ -491,33 +539,7 @@
   border: 0;
 }
 
-/* RAG quota + limit reached (server-enforced) */
-.chatbot-page__quota-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 0.75rem;
-  padding: 0.45rem 1rem 0.35rem;
-  border-top: 1px solid rgba(226, 232, 225, 0.85);
-  background: rgba(248, 250, 249, 0.95);
-  flex-shrink: 0;
-}
-
-.chatbot-page__quota-pill {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #334155;
-  padding: 0.25rem 0.65rem;
-  border-radius: 999px;
-  background: #fff;
-  border: 1px solid rgba(15, 81, 50, 0.15);
-}
-
-.chatbot-page__quota-hint {
-  font-size: 0.72rem;
-  color: #64748b;
-}
-
+/* RAG limit reached (server-enforced) */
 .chatbot-page__limit-banner {
   padding: 0.4rem 0.65rem 0.5rem;
   border-top: 1px solid rgba(251, 191, 36, 0.35);
@@ -646,33 +668,17 @@
   }
 
   .chatbot-page__messages {
-    padding: 0.85rem 0.85rem 0.65rem;
+    min-height: min(48dvh, 22rem);
+    padding: 0.45rem 0.55rem 0.4rem;
   }
 
   .chatbot-page__form {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.65rem;
+    gap: 0.45rem;
   }
 
   .chatbot-page__send {
     width: 100%;
-  }
-
-  .chatbot-page__quick-campus-chips {
-    gap: 0.4rem;
-  }
-
-  .chatbot-page__chip {
-    flex: 1 1 calc(50% - 0.25rem);
-    min-width: calc(50% - 0.25rem);
-    justify-content: center;
-  }
-}
-
-@media (max-width: 380px) {
-  .chatbot-page__chip {
-    flex: 1 1 100%;
-    min-width: 100%;
   }
 }

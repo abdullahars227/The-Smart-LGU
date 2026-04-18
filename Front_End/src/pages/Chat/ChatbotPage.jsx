@@ -55,7 +55,7 @@ export default function ChatbotPage() {
       id: 'welcome',
       role: 'assistant',
       content:
-        'Welcome. Ask about BSCS, BSSE, or BSAI — fees, eligibility, and labs from our PDF knowledge base. For on-campus directions (mosque, cafe, Fountain Ground, sports complex, or main gate), type a question like “Where is LGU Mosque?” or use the shortcuts below—no extra assistant or API keys needed. Knowledge-base AI answers are limited per visit (see the counter under the chat); campus map shortcuts do not use that limit.',
+        'Ask program questions (BSCS, BSSE, BSAI) from our PDFs. For directions, ask e.g. “Where is LGU Mosque?” or use Map shortcuts. AI turns: badge next to the title.',
     },
   ])
   const [input, setInput] = useState('')
@@ -204,7 +204,7 @@ export default function ChatbotPage() {
         id: 'welcome',
         role: 'assistant',
         content:
-          'Chat cleared. Ask about programs from the knowledge base, or use campus shortcuts for Google Maps pins (gate, mosque, cafe, and more). Your per-visit AI question allowance is unchanged.',
+          'Chat cleared. Program Q&A from PDFs; map shortcuts for campus pins. Your AI turn allowance is unchanged.',
       },
     ])
     setError(null)
@@ -226,10 +226,8 @@ export default function ChatbotPage() {
     void send()
   }
 
-  const quotaLabel =
-    quotaLoaded && ragRemaining !== null
-      ? `${ragRemaining} / ${ragLimit} knowledge-base turns left this visit`
-      : 'Loading usage…'
+  const quotaBadge =
+    quotaLoaded && ragRemaining !== null ? `${ragRemaining}/${ragLimit} AI turns` : '…'
 
   return (
     <main className="chatbot-page">
@@ -237,14 +235,18 @@ export default function ChatbotPage() {
       <div className="container chatbot-page__inner">
         <header className="chatbot-page__header">
           <div className="chatbot-page__head-text">
-            <h1 className="chatbot-page__title">LGU Assistant</h1>
+            <div className="chatbot-page__title-row">
+              <h1 className="chatbot-page__title">LGU Assistant</h1>
+              <span className="chatbot-page__quota-badge" title="Knowledge-base AI turns this visit" aria-live="polite">
+                {quotaBadge}
+              </span>
+            </div>
             <p className="chatbot-page__subtitle">
-              Program answers use your uploaded PDFs only. Campus pins open in Google Maps (no Maps API on this site).
-              Nothing is saved after you leave this page.
+              PDF-based answers · Campus maps open in Google · Session not saved
             </p>
           </div>
           <button type="button" className="chatbot-page__clear" onClick={clearChat}>
-            Clear chat
+            Clear
           </button>
         </header>
 
@@ -253,7 +255,9 @@ export default function ChatbotPage() {
             {messages.map((msg) => (
               <article
                 key={msg.id}
-                className={`chatbot-page__bubble chatbot-page__bubble--${msg.role}`}
+                className={`chatbot-page__bubble chatbot-page__bubble--${msg.role}${
+                  msg.id === 'welcome' ? ' chatbot-page__bubble--welcome' : ''
+                }`}
               >
                 <div className="chatbot-page__bubble-label">
                   {msg.role === 'user' ? 'You' : 'Assistant'}
@@ -345,13 +349,6 @@ export default function ChatbotPage() {
                 </button>
               ))}
             </div>
-          </div>
-
-          <div className="chatbot-page__quota-row" aria-live="polite">
-            <span className="chatbot-page__quota-pill">{quotaLabel}</span>
-            {quotaLoaded && !ragBlocked && ragRemaining !== null && ragRemaining <= 2 && (
-              <span className="chatbot-page__quota-hint">Campus shortcuts do not use a turn.</span>
-            )}
           </div>
 
           <form className="chatbot-page__form" onSubmit={onSubmit}>

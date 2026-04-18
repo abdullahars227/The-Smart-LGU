@@ -1,3 +1,4 @@
+import BscsSoftwarePipeline from '../../components/programVisuals/BscsSoftwarePipeline'
 import './BSCSPage.css'
 
 const RESEARCH_AREAS = [
@@ -66,6 +67,10 @@ export default function BSCSPage() {
                       <stop offset="0%" stopColor="#0f5132" />
                       <stop offset="100%" stopColor="#22c55e" />
                     </linearGradient>
+                    <linearGradient id="bscsFlowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#22c55e" />
+                      <stop offset="100%" stopColor="#15803d" />
+                    </linearGradient>
                   </defs>
                   {/* Processor / board frame — CS hardware metaphor, not biology */}
                   <rect
@@ -88,7 +93,7 @@ export default function BSCSPage() {
                   />
                   {/* Network / graph nodes */}
                   <circle cx="42" cy="74" r="5.5" fill="url(#bscsTechGrad)" />
-                  <circle cx="100" cy="102" r="7" fill="url(#bscsTechGrad)" />
+                  <circle cx="100" cy="102" r="7" fill="url(#bscsTechGrad)" className="bscs-hero__hub" />
                   <circle cx="158" cy="126" r="5.5" fill="url(#bscsTechGrad)" />
                   <circle cx="158" cy="74" r="4" fill="#22c55e" opacity="0.95" />
                   <circle cx="42" cy="126" r="4" fill="#22c55e" opacity="0.95" />
@@ -120,6 +125,25 @@ export default function BSCSPage() {
                     strokeWidth="1.1"
                     fill="none"
                   />
+                  <path
+                    id="bscs-hero-energy-path"
+                    d="M 42 126 L 86 102 L 100 102 L 158 74"
+                    stroke="url(#bscsFlowGrad)"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="bscs-hero__energy-line"
+                  />
+                  <circle r="4" fill="#22c55e" className="bscs-hero__packet">
+                    <animateMotion dur="3.6s" repeatCount="indefinite" rotate="auto" calcMode="linear">
+                      <mpath href="#bscs-hero-energy-path" />
+                    </animateMotion>
+                  </circle>
+                  <circle r="3" fill="#86efac" opacity="0.95" className="bscs-hero__packet bscs-hero__packet--lag">
+                    <animateMotion dur="3.6s" repeatCount="indefinite" rotate="auto" begin="1.2s" calcMode="linear">
+                      <mpath href="#bscs-hero-energy-path" />
+                    </animateMotion>
+                  </circle>
                 </svg>
               </div>
             </div>
@@ -199,18 +223,10 @@ export default function BSCSPage() {
 
       <section className="bscs-section bscs-section--media" aria-labelledby="bscs-media-heading">
         <div className="container bscs-media">
-          <div className="bscs-media__visual">
-            <img
-              className="bscs-media__img"
-              src="/images/bscs-media-stack.jpg"
-              alt=""
-              width={540}
-              height={360}
-              loading="lazy"
-              decoding="async"
-            />
+          <div className="bscs-media__visual bscs-media__visual--pipeline">
+            <BscsSoftwarePipeline />
             <div className="bscs-media__holo" aria-hidden="true" />
-            <div className="bscs-media__caption">Layers, latency, and logic—one coherent stack</div>
+            <div className="bscs-media__caption">From first sketch to production—one coherent pipeline</div>
           </div>
           <div className="bscs-media__text">
             <h2 id="bscs-media-heading" className="bscs-h2 bscs-h2--large">

@@ -8,7 +8,13 @@ import ragRoutes from './routes/ragRoutes.js'
 export function createApp() {
   const app = express()
 
-  app.use(cors())
+  app.use(
+    cors({
+      origin: true,
+      credentials: true,
+      allowedHeaders: ['Content-Type', 'X-LGU-Chat-Session'],
+    }),
+  )
   app.use(express.json({ limit: '1mb' }))
 
   

@@ -1,0 +1,35 @@
+/* Mobile-only: compact FAB above voice assistant (desktop hidden) */
+.whatsapp-mobile-fab {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .whatsapp-mobile-fab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: calc(4.35rem + env(safe-area-inset-bottom));
+    z-index: 41;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #ffffff;
+    box-shadow: 0 10px 24px rgba(37, 211, 102, 0.38);
+    border: none;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .whatsapp-mobile-fab:active {
+    transform: scale(0.96);
+  }
+
+  .whatsapp-mobile-fab__icon {
+    width: 26px;
+    height: 26px;
+    display: block;
+  }
+}

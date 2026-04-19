@@ -15,7 +15,15 @@ const registerRules = [
   body('phone')
     .trim()
     .isLength({ min: 10, max: 20 })
-    .withMessage('Phone must be 10–20 characters'),
+    .withMessage('Phone must be 10–20 characters')
+    .matches(/^[\d+()\s.-]+$/)
+    .withMessage('Phone may only contain digits and + ( ) - . spaces')
+    .custom((value) => {
+      if (!/\d/.test(String(value))) {
+        throw new Error('Phone must include at least one digit')
+      }
+      return true
+    }),
   body('password')
     .isLength({ min: 8, max: 128 })
     .withMessage('Password must be at least 8 characters'),

@@ -130,9 +130,15 @@ export default function BSSEPage() {
               systematic, controlled, and efficient way.
             </p>
             <div className="bsse-hero__chips" aria-label="Program highlights">
-              <span>Systematic development</span>
-              <span>Quality-driven engineering</span>
-              <span>Research + industry readiness</span>
+              <span className="bsse-hero-chip">
+                <span className="bsse-hero-chip__text">Systematic development</span>
+              </span>
+              <span className="bsse-hero-chip">
+                <span className="bsse-hero-chip__text">Quality-driven engineering</span>
+              </span>
+              <span className="bsse-hero-chip">
+                <span className="bsse-hero-chip__text">Research + industry readiness</span>
+              </span>
             </div>
           </div>
           <div className="bsse-hero__panel">

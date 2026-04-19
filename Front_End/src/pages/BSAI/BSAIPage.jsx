@@ -45,10 +45,14 @@ export default function BSAIPage() {
             </p>
             <ul className="bsai-hero__badges" aria-label="Program highlights">
               <li>
-                <span className="bsai-pill">HEC-aligned AI curriculum</span>
+                <span className="bsai-pill">
+                  <span className="bsai-pill__text">HEC-aligned AI curriculum</span>
+                </span>
               </li>
               <li>
-                <span className="bsai-pill bsai-pill--ghost">BSAI · research & industry pathways</span>
+                <span className="bsai-pill bsai-pill--ghost">
+                  <span className="bsai-pill__text">BSAI · research & industry pathways</span>
+                </span>
               </li>
             </ul>
           </div>

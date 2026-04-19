@@ -257,11 +257,18 @@
 }
 
 .bscs-section {
-  padding: clamp(3rem, 7vw, 5rem) 0;
+  padding: clamp(2.25rem, 5vw, 3.25rem) 0;
 }
 
 .bscs-section--vision {
   background: linear-gradient(180deg, #ffffff 0%, var(--bscs-surface-2) 100%);
+  padding-top: clamp(1.75rem, 4vw, 2.5rem);
+  padding-bottom: clamp(0.85rem, 2vw, 1.35rem);
+}
+
+/* Tighten gap between Vision/Mission and Research footprint (avoid double huge section padding) */
+.bscs-section--vision + .bscs-section {
+  padding-top: clamp(1.1rem, 2.8vw, 1.75rem);
 }
 
 .bscs-section--media {
@@ -686,7 +693,106 @@
   }
 }
 
+/* Scroll-style section & card reveals (skip hero; hero has its own motion) */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes bscs-block-in {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes bscs-card-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .bscs-page > section:nth-of-type(n + 2) {
+    opacity: 0;
+    animation: bscs-block-in 0.72s ease forwards;
+  }
+
+  .bscs-page > section:nth-of-type(2) {
+    animation-delay: 0.04s;
+  }
+  .bscs-page > section:nth-of-type(3) {
+    animation-delay: 0.1s;
+  }
+  .bscs-page > section:nth-of-type(4) {
+    animation-delay: 0.16s;
+  }
+  .bscs-page > section:nth-of-type(5) {
+    animation-delay: 0.22s;
+  }
+  .bscs-page > section:nth-of-type(6) {
+    animation-delay: 0.28s;
+  }
+  .bscs-page > section:nth-of-type(7) {
+    animation-delay: 0.34s;
+  }
+
+  .bscs-research-grid .bscs-card {
+    opacity: 0;
+    animation: bscs-card-in 0.55s ease forwards;
+  }
+
+  .bscs-research-grid .bscs-card:nth-child(1) {
+    animation-delay: 0.2s;
+  }
+  .bscs-research-grid .bscs-card:nth-child(2) {
+    animation-delay: 0.28s;
+  }
+  .bscs-research-grid .bscs-card:nth-child(3) {
+    animation-delay: 0.36s;
+  }
+  .bscs-research-grid .bscs-card:nth-child(4) {
+    animation-delay: 0.44s;
+  }
+  .bscs-research-grid .bscs-card:nth-child(5) {
+    animation-delay: 0.52s;
+  }
+  .bscs-research-grid .bscs-card:nth-child(6) {
+    animation-delay: 0.6s;
+  }
+
+  .bscs-soc-row .bscs-soc-card {
+    opacity: 0;
+    animation: bscs-card-in 0.55s ease forwards;
+  }
+
+  .bscs-soc-row .bscs-soc-card:nth-child(1) {
+    animation-delay: 0.18s;
+  }
+  .bscs-soc-row .bscs-soc-card:nth-child(2) {
+    animation-delay: 0.26s;
+  }
+  .bscs-soc-row .bscs-soc-card:nth-child(3) {
+    animation-delay: 0.34s;
+  }
+  .bscs-soc-row .bscs-soc-card:nth-child(4) {
+    animation-delay: 0.42s;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .bscs-page > section:nth-of-type(n + 2),
+  .bscs-research-grid .bscs-card,
+  .bscs-soc-row .bscs-soc-card {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
   .bscs-hero__aurora,
   .bscs-eyebrow__dot,
   .bscs-hero__tech-pitch,

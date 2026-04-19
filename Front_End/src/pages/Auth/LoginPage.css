@@ -154,6 +154,26 @@
   box-shadow: 0 0 0 3px rgba(15, 81, 50, 0.15);
 }
 
+.login-form__field--invalid input {
+  border-color: #dc2626;
+  background: #fffafa;
+  box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.25);
+}
+
+.login-form__field--invalid input:focus {
+  border-color: #b91c1c;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+}
+
+.login-form__field-msg {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #b91c1c;
+  line-height: 1.35;
+}
+
 .login-form__error {
   margin: 0;
   padding: 0.55rem 0.65rem;

@@ -1,10 +1,19 @@
+import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthContext'
+import SignOutConfirmModal from '../SignOutConfirmModal/SignOutConfirmModal'
 import './Header.css'
 
 export default function Header() {
   const { user, logout, isLoggedIn } = useAuth()
   const navigate = useNavigate()
+  const [signOutOpen, setSignOutOpen] = useState(false)
+
+  const confirmSignOut = () => {
+    setSignOutOpen(false)
+    logout()
+    navigate('/')
+  }
 
   return (
     <header className="site-header">
@@ -48,14 +57,7 @@ export default function Header() {
                 <span className="nav-account__user" title={user?.email}>
                   {user?.name || user?.email}
                 </span>
-                <button
-                  type="button"
-                  className="nav-account__btn"
-                  onClick={() => {
-                    logout()
-                    navigate('/')
-                  }}
-                >
+                <button type="button" className="nav-account__btn" onClick={() => setSignOutOpen(true)}>
                   Sign out
                 </button>
               </>
@@ -67,6 +69,12 @@ export default function Header() {
           </div>
         </div>
       </div>
+
+      <SignOutConfirmModal
+        open={signOutOpen}
+        onCancel={() => setSignOutOpen(false)}
+        onConfirm={confirmSignOut}
+      />
     </header>
   )
 }
